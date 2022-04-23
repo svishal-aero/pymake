@@ -1,0 +1,3 @@
+def processStruct(lines):
+
+    struct = []
