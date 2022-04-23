@@ -1,7 +1,4 @@
-import os, sys
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from Scope import Scope
-sys.path.pop(0)
+from .Scope import Scope
 
 class CHeader:
 
