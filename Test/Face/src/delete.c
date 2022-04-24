@@ -9,4 +9,5 @@ void Face__delete(Face *self)
             Node__delete(self->nodes);
         free(self->nodes);
     }
+    Face__init(self);
 }
