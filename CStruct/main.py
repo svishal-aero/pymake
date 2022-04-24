@@ -5,6 +5,7 @@ class CStruct:
 
     def __init__(self, filename):
         self.name      = ''
+        self.pack      = None
         self.imports   = []
         self.vars      = []
         self.functions = []
@@ -15,7 +16,14 @@ class CStruct:
 
     def __processHeader(self, filename):
         statements = getStatementsFromHeader(filename)
+        assert statements[0][0]=='#pragma' and statements[0][1]=='once',\
+               'First line must be "#pragma once"'
+        assert statements[1][0]=='#pragma' and statements[1][1]=='pack' and\
+               statements[1][2].kind=='()' and statements[1][2].contents[0]=='1',\
+               'Second line must be "#pragma pack(1)"'
         for statement in statements:
+            if containsPackStatement(statement):
+                self.pack = int(statement[-1].contents[0])
             if containsModuleImport(statement):
                 self.__processImport(statement[1][1:-1])
             if containsStructDefinition(statement):
@@ -23,10 +31,10 @@ class CStruct:
                 structContents = statement[3].contents
                 self.__processStructContents(structContents)
             if containsFunctionDeclaration(statement):
-                assert self.name!='', 'Error: Function defined before struct'
+                assert self.name!='', 'Function defined before struct'
                 self.__processFunction(statement)
         assert self.name!='',\
-            'Error: No struct found in file, please refer '\
+            'No struct found in file, please refer '\
             'to the format mentioned in the manual'
 
     def __processImport(self, filepath):
@@ -85,6 +93,7 @@ class CStruct:
 
     def __writeStruct(self):
         output  = 'class %s(C.Structure):\n\n' % self.name
+        if self.pack is not None: output  = '    _pack_ = %d\n' % (self.pack)
         output += self.__writeStructFields()
         for fn in self.functions:
             output += self.__writeFunctionDeclaration(fn)

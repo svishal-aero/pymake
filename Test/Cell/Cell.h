@@ -1,5 +1,5 @@
-#ifndef Cell_h
-#define Cell_h
+#pragma once
+#pragma pack(1)
 
 #include "../Node/Node.h"
 #include "../Face/Face.h"
@@ -13,5 +13,3 @@ Cell;
 
 void Cell__init(Cell *self);
 void Cell__delete(Cell *self);
-
-#endif

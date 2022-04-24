@@ -2,6 +2,12 @@ import os
 from .CParser import CParser
 from .CParser.Scope import Scope as CScope
 
+def containsPackStatement(statement):
+    if statement[0]=='#pragma':
+        if statement[1]=='pack':
+            return True
+    return False
+
 def containsModuleImport(statement):
     if statement[0]=='#include':
         if statement[1][0]=='"':
@@ -22,7 +28,8 @@ def containsStructDefinition(statement):
 
 def containsFunctionDeclaration(statement):
     if isinstance(statement[-1],CScope):
-        if statement[0] not in ['static','inline','#define']:
+        if statement[0] not in ['static','inline'] and\
+           statement[0][0]!='#':
             return True
     return False
 

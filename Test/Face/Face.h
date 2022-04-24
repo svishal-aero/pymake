@@ -1,5 +1,5 @@
-#ifndef Face_h
-#define Face_h
+#pragma once
+#pragma pack(1)
 
 #include "../Node/Node.h"
 
@@ -12,5 +12,3 @@ Face;
 
 void Face__init(Face *self);
 void Face__delete(Face *self);
-
-#endif
