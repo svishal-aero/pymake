@@ -5,10 +5,10 @@ def readLocalOptions():
     if os.path.exists('pyMakeOptions'):
         if os.path.isdir('pyMakeOptions'):
             os.chdir('makeflags')
-            options['D'] = getDefFlags()
-            options['I'] = getIncFlags()
-            options['L'] = getLibFlags()
-            options['CC'] = open('compiler.txt').read().strip()
+            options['D']  = getDefFlags()
+            options['I']  = getIncFlags()
+            options['L']  = getLibFlags()
+            options['CC'] = getCC()
             os.chdir('..')
     return options
 
