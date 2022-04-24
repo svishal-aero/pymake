@@ -1,2 +1,5 @@
 **/__pycache__
-
+**/obj
+**/lib*.so
+**/Makefile
+pymake

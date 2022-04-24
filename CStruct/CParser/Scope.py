@@ -5,6 +5,9 @@ class Scope:
         self.kind = kind
         self.contents = []
 
+    def __str__(self):
+        return ' '.join(self.combineContents())
+
     def combineContents(self):
 
         contents = []
