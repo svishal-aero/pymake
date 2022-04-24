@@ -1,13 +1,14 @@
 import os
 
-def readLocalOptions():
+def readLocalOptions(imports):
     options = {'D':[], 'I':[], 'L':[], 'CC':'gcc'}
+    options['L'].extend(getImportFlags(imports))
     if os.path.exists('pyMakeOptions'):
         if os.path.isdir('pyMakeOptions'):
             os.chdir('makeflags')
-            options['D']  = getDefFlags()
-            options['I']  = getIncFlags()
-            options['L']  = getLibFlags()
+            options['D'].extend(getDefFlags())
+            options['I'].extend(getIncFlags())
+            options['L'].extend(getLibFlags())
             options['CC'] = getCC()
             os.chdir('..')
     return options
@@ -47,5 +48,13 @@ def getLibFlags():
             assert filename[:3]=='lib' and filename[-3:]=='.so'
             name = filename[3:-3]
             dirname = os.path.dirname(path)
-            flags.append('-Wl,rpath='+dirname+' -L'+dirname+' -l'+name)
+            flags.append('-Wl,-rpath='+dirname+' -L'+dirname+' -l'+name)
+    return flags
+
+def getImportFlags(imports):
+    flags = []
+    for module in imports:
+        path = module['path']
+        name = os.path.basename(path)
+        flags.append('-Wl,-rpath='+path+' -L'+path+' -l'+name)
     return flags

@@ -16,7 +16,7 @@ def make(finished=[]):
             os.chdir(module['path'])
             finished = make(finished=finished)
             os.chdir(cwd)
-    options = readLocalOptions()
+    options = readLocalOptions(struct.imports)
     with open('Makefile', 'w') as f:
         f.write('SRC := $(wildcard src/*.c)\n')
         f.write('OBJ := $(patsubst src/%.c,obj/%.o,$(SRC))')
