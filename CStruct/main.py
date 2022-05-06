@@ -93,7 +93,7 @@ class CStruct:
 
     def __writeStruct(self):
         output  = 'class %s(C.Structure):\n\n' % self.name
-        if self.pack is not None: output  = '    _pack_ = %d\n' % (self.pack)
+        if self.pack is not None: output += '    _pack_ = %d\n' % (self.pack)
         output += self.__writeStructFields()
         for fn in self.functions:
             output += self.__writeFunctionDeclaration(fn)
