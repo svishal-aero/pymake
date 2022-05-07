@@ -5,7 +5,7 @@ def readLocalOptions(imports):
     options['L'].extend(getImportFlags(imports))
     if os.path.exists('pyMakeOptions'):
         if os.path.isdir('pyMakeOptions'):
-            os.chdir('makeflags')
+            os.chdir('pyMakeOptions')
             options['D'].extend(getDefFlags())
             options['I'].extend(getIncFlags())
             options['L'].extend(getLibFlags())
