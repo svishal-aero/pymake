@@ -11,12 +11,17 @@ def make(finished=[]):
     structName = os.path.basename(cwd)
     struct = CStruct(structName+'.h')
     struct.write()
+    depLibsAll = []
     for module in struct.imports:
         if module['path'] not in finished:
             os.chdir(module['path'])
-            finished = make(finished=finished)
+            finished, depLibs = make(finished=finished)
+            depLibsAll.extend(depLibs)
             os.chdir(cwd)
     options = readLocalOptions(struct.imports)
+    for lib in depLibsAll:
+        if lib not in options['L']:
+            options['L'].append(lib)
     with open('Makefile', 'w') as f:
         f.write('SRC := $(wildcard src/*.c)\n')
         f.write('OBJ := $(patsubst src/%.c,obj/%.o,$(SRC))')
@@ -39,7 +44,7 @@ def make(finished=[]):
     call('make -j > make.log 2>&1', shell=True)
     finished.append(cwd)
     print('pymake completed for %s' % cwd)
-    return finished
+    return finished, options['L']
 
 def clean():
     cwd = os.getcwd()

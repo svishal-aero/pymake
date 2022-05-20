@@ -8,7 +8,10 @@ def readLocalOptions(imports):
             os.chdir('pyMakeOptions')
             options['D'].extend(getDefFlags())
             options['I'].extend(getIncFlags())
-            options['L'].extend(getLibFlags())
+            temp = getLibFlags()
+            for lib in temp:
+                if lib not in options['L']:
+                    options['L'].append(lib)
             options['CC'] = getCC()
             os.chdir('..')
     return options
