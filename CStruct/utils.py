@@ -88,7 +88,7 @@ def processVariable(tags):
                 tags.pop(0)
         else:
             if tags[0].kind=='()':
-                varname, varsize = processVariable(tags[0])
+                varname, varsize = processVariable(tags[0].contents)
                 tags.pop(0)
             elif tags[0].kind=='[]':
                 staticSize.append(int(tags[0].contents[0]))

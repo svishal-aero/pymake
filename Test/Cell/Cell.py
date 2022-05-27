@@ -2,15 +2,15 @@ import ctypes as C
 
 import sys
 
-sys.path.insert(0, "/home/vsriv/Git/pymake/Test/Face")
+sys.path.insert(0, "/home/svishal/Git/pymake/Test/Face")
 from Face import Face
 sys.path.pop(0)
 
-lib = C.CDLL("/home/vsriv/Git/pymake/Test/Cell/libCell.so")
+lib = C.CDLL("/home/svishal/Git/pymake/Test/Cell/libCell.so")
 
 class Cell(C.Structure):
 
-    _pack_ = 1
+    _pack_ = 2
     _fields_ = [
         ("nFaces", C.c_int),
         ("faces", C.POINTER(Face)),

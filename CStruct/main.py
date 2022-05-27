@@ -5,7 +5,7 @@ class CStruct:
 
     def __init__(self, filename):
         self.name      = ''
-        self.pack      = None
+        self.pack      = 0
         self.imports   = []
         self.vars      = []
         self.functions = []
@@ -18,21 +18,28 @@ class CStruct:
         statements = getStatementsFromHeader(filename)
         assert statements[0][0]=='#pragma' and statements[0][1]=='once',\
                'First line must be "#pragma once"'
-        assert statements[1][0]=='#pragma' and statements[1][1]=='pack' and\
-               statements[1][2].kind=='()' and statements[1][2].contents[0]=='1',\
-               'Second line must be "#pragma pack(1)"'
-        for statement in statements:
-            if containsPackStatement(statement):
-                self.pack = int(statement[-1].contents[0])
-            if containsModuleImport(statement):
-                self.__processImport(statement[1][1:-1])
-            if containsStructDefinition(statement):
-                self.name = statement[-1]
-                structContents = statement[3].contents
+        for iStatement in range(1, len(statements)):
+            curr = statements[iStatement]
+            prev = statements[iStatement-1]
+            if containsModuleImport(curr):
+                self.__processImport(curr[1][1:-1])
+            if containsStructDefinition(curr):
+                assert containsPackStatement(prev), 'Struct definition must be '\
+                       'preceded by #pragma pack([n]) where n (optional argument) '\
+                       'is number of bytes'
+                if len(prev[-1].contents)>0: self.pack = int(prev[-1].contents[0])
+                self.name = curr[-1]
+                structContents = curr[3].contents
                 self.__processStructContents(structContents)
-            if containsFunctionDeclaration(statement):
+                assert len(statements)>iStatement+1, 'Struct definition must be '\
+                       'followed by #pragma pack()'
+                assert containsPackStatement(statements[iStatement+1]), 'Struct '\
+                       'definition must be followed by #pragma pack()' 
+                assert len(statements[iStatement+1][-1].contents)==0, 'Struct '\
+                       'definition must be followed by #pragma pack()'
+            if containsFunctionDeclaration(curr):
                 assert self.name!='', 'Function defined before struct'
-                self.__processFunction(statement)
+                self.__processFunction(curr)
         assert self.name!='',\
             'No struct found in file, please refer '\
             'to the format mentioned in the manual'
@@ -93,7 +100,7 @@ class CStruct:
 
     def __writeStruct(self):
         output  = 'class %s(C.Structure):\n\n' % self.name
-        if self.pack is not None: output += '    _pack_ = %d\n' % (self.pack)
+        if self.pack>0: output += '    _pack_ = %d\n' % (self.pack)
         output += self.__writeStructFields()
         for fn in self.functions:
             output += self.__writeFunctionDeclaration(fn)

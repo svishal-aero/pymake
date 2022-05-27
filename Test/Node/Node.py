@@ -1,6 +1,6 @@
 import ctypes as C
 
-lib = C.CDLL("/home/vsriv/Git/pymake/Test/Node/libNode.so")
+lib = C.CDLL("/home/svishal/Git/pymake/Test/Node/libNode.so")
 
 class Node(C.Structure):
 

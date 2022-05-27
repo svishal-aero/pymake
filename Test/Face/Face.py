@@ -2,11 +2,11 @@ import ctypes as C
 
 import sys
 
-sys.path.insert(0, "/home/vsriv/Git/pymake/Test/Node")
+sys.path.insert(0, "/home/svishal/Git/pymake/Test/Node")
 from Node import Node
 sys.path.pop(0)
 
-lib = C.CDLL("/home/vsriv/Git/pymake/Test/Face/libFace.so")
+lib = C.CDLL("/home/svishal/Git/pymake/Test/Face/libFace.so")
 
 class Face(C.Structure):
 
