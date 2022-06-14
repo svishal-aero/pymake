@@ -36,7 +36,7 @@ def make(finished=[]):
         f.write('all: lib'+structName+'.so')
         f.write('\n\n')
         f.write('lib'+structName+'.so: $(OBJ)\n')
-        f.write('\t'+options['CC']+' -O3 -shared -fPIC -o $@ $^ $(LDFLAGS)')
+        f.write('\t'+options['CC']+' $(CFLAGS) -O3 -shared -fPIC -o $@ $^ $(LDFLAGS)')
         f.write('\n\n')
         f.write('obj/%.o: src/%.c '+structName+'.h\n')
         f.write('\t'+ options['CC'] + ' $(CFLAGS) ')
