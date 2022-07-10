@@ -40,7 +40,7 @@ def make(finished=[]):
         f.write('\n\n')
         f.write('obj/%.o: src/%.c '+structName+'.h\n')
         f.write('\t'+ options['CC'] + ' $(CFLAGS) ')
-        f.write('-c -O3 -fPIC -o $@ $<')
+        f.write('-c -O3 -fPIC -o $@ $<\n')
     call('make -j > make.log 2>&1', shell=True)
     finished.append(cwd)
     print('pymake completed for %s' % cwd)
